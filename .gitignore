@@ -1,0 +1,4 @@
+# Ignore data files to keep them private
+data/
+.venv/
+__pycache__/
