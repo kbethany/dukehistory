@@ -59,8 +59,8 @@ col2.metric("With Known Outcomes", len(df_known))
 
 # Section 2: Graduates by year
 st.subheader("Graduates by Year")
-df_filtered = df_known[df_known["profession"] != "Unknown"]
-grads_per_year = df_known.groupby("gradyr").size().reset_index(name="count")
+grads_per_year = filtered = df[df["gradyr"].isin(selected_years)]
+.groupby("gradyr").size().reset_index(name="count")
 mean_val = grads_per_year["count"].mean()
 
 bar = alt.Chart(grads_per_year).mark_bar().encode(
@@ -77,9 +77,8 @@ st.altair_chart(bar + mean_rule, use_container_width=True)
 
 # Section 3: Top industries
 st.subheader("Top Industries")
-df_industry_known = df_known[df_known["profession"] != "Unknown"]
-filtered_df = df[df["gradyr"].isin(selected_years)]
-industry_counts = df_industry_known["industry"].value_counts().head(10).reset_index()
+df_industry_known = filtered[filtered["industry"] != "Unknown"]
+industry_counts = filtered["industry"].value_counts().head(10).reset_index()
 industry_counts.columns = ["industry", "count"]
 
 chart = alt.Chart(industry_counts).mark_bar().encode(
@@ -91,9 +90,8 @@ st.altair_chart(chart, use_container_width=True)
 
 ## Tree Map of Industries
 years = sorted(df["gradyr"].dropna().unique())
-filtered_df = df[df["gradyr"].isin(selected_years)]
 profession_counts = (
-    filtered_df["industry"]
+    filtered["industry"]
     .value_counts()
     .reset_index()
 )
@@ -112,10 +110,8 @@ st.plotly_chart(fig, use_container_width=True)
 
 # Section 4: Top Professions
 st.subheader("Top Professions")
-
-df_profession_known = df_known[df_known["profession"] != "Unknown"]
-filtered_df = df[df["gradyr"].isin(selected_years)]
-profession_counts = filtered_df["profession"].value_counts().head(10).reset_index()
+df_profession_known = filtered[filtered["profession"] != "Unknown"]
+profession_counts = filtered["profession"].value_counts().head(10).reset_index()
 profession_counts.columns = ["profession", "count"]
 
 chart = alt.Chart(profession_counts).mark_bar().encode(
@@ -128,9 +124,8 @@ st.altair_chart(chart, use_container_width=True)
 
 ## Tree Map of Professions
 years = sorted(df["gradyr"].dropna().unique())
-filtered_df = df[df["gradyr"].isin(selected_years)]
 profession_counts = (
-    filtered_df["profession"]
+    filtered["profession"]
     .value_counts()
     .reset_index()
 )
@@ -146,26 +141,10 @@ fig = px.treemap(
 st.plotly_chart(fig, use_container_width=True)
 
 
-
-# Generate text from known employers
-#df_employer_known = df_known[df_known["employer"] != "Unknown"].isin(selected_years)]
-#text = " ".join(df_employer_known["employer"])
-
-# Create word cloud
-#wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
-
-# Display 
-#st.subheader("Top Employers")
-#fig, ax = plt.subplots(figsize=(10, 5))
-#ax.imshow(wordcloud, interpolation="bilinear")
-#ax.axis("off")
-#st.pyplot(fig)
-
-
 st.subheader("Where History graduates work today")
 
 employer_counts = (
-    df_known["employer"]
+    filtered["employer"]
     .value_counts()
     .reset_index()
     .rename(columns={"index": "Employer", "employer": "Count"})
@@ -173,6 +152,20 @@ employer_counts = (
 st.dataframe(employer_counts)
 
 
-# Optional: raw data table
+# Generate text from known employers
+df_employer_known = filtered[filtered["employer"] != "Unknown"].isin(selected_years)]
+text = " ".join(df_employer_known["employer"])
+
+# Create word cloud
+wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
+
+# Display 
+st.subheader("Top Employers")
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.imshow(wordcloud, interpolation="bilinear")
+ax.axis("off")
+st.pyplot(fig)
+
+# raw data table
 with st.expander("View raw data"):
-    st.table(df_known.head(50))  # or full df if it's not too big
+    st.table(df.head()  # or limit to ~50 if it's too big
