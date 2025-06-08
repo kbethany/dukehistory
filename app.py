@@ -38,7 +38,7 @@ df_known = df[df["status_known"]]
 
 # Title and context
 st.title("Where Do Our History Graduates Go?")
-st.caption("This dashboard shows a snapshot of current employment outcomes for History majors graduating between 2016 and 2023, based on publicly available data like LinkedIn.")
+st.caption("This dashboard shows a snapshot of current employment outcomes for History majors graduating between 2016 and 2023, based on publicly available information from LinkedIn.")
 
 st.markdown("---")
 
@@ -48,7 +48,7 @@ col1.metric("Total Graduates", len(df))
 col2.metric("With Known Outcomes", len(df_known))
 
 # Section 2: Graduates by year
-st.subheader("Graduates by Year (Known Outcomes Only)")
+st.subheader("Graduates by Year")
 
 grads_per_year = df_known.groupby("gradyr").size().reset_index(name="count")
 mean_val = grads_per_year["count"].mean()
@@ -81,7 +81,8 @@ st.altair_chart(chart, use_container_width=True)
 # Section 4: Top Professions
 st.subheader("Top Professions")
 
-profession_counts = df_known["profession"].value_counts().head(10).reset_index()
+df_profession_known = df_known[df_known["profession"].notna()
+profession_counts = df_profession_known["profession"].value_counts().head(10).reset_index()
 profession_counts.columns = ["profession", "count"]
 
 chart = alt.Chart(profession_counts).mark_bar().encode(
@@ -94,7 +95,8 @@ st.altair_chart(chart, use_container_width=True)
 # Section 5: Top Employers
 st.subheader("Top Employers")
 
-employer_counts = df_known["employer"].value_counts().head(10).reset_index()
+df_employer_known = df_known[df_known["employer"].notna()
+employer_counts = df_employer_known["employer"].value_counts().head(10).reset_index()
 employer_counts.columns = ["employer", "count"]
 
 chart = alt.Chart(employer_counts).mark_bar().encode(
