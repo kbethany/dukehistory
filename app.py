@@ -7,9 +7,7 @@ st.set_page_config(page_title="Duke History Alumni Outcomes", layout="wide")
 # Load data
 @st.cache_data
 def load_data():
-    file_path = "data/Duke History Grads IN PROGRESS.xlsx"
-    sheet_name = "Where Are They Now"
-    df = pd.read_excel(file_path, sheet_name=sheet_name)
+    df = pd.read_csv("data/grads.csv")
 
 
     # Rename columns
