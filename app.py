@@ -120,20 +120,6 @@ chart = alt.Chart(profession_counts).mark_bar().encode(
 )
 st.altair_chart(chart, use_container_width=True)
 
-import altair as alt
-
-df_filtered = df[df["profession"] != "Unknown"]
-
-industry_by_year = alt.Chart(df_known).mark_bar().encode(
-    x=alt.X("gradyr:O", title="Graduation Year", sort=alt.EncodingSortField(field="grad_year", order="ascending")),
-    y=alt.Y("count():Q", title="Number of Graduates"),
-    color=alt.Color("profession:N", title="Industry"),
-    tooltip=["gradyr:O", "profession:N", "count():Q"]
-).properties(
-    title="Industry Breakdown by Graduation Year",
-)
-
-st.altair_chart(industry_by_year, use_container_width=True)
 
 ## Tree Map of Professions
 years = sorted(df["gradyr"].dropna().unique())
