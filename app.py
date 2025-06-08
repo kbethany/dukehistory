@@ -153,7 +153,7 @@ st.dataframe(employer_counts)
 
 
 # Generate text from known employers
-df_employer_known = filtered[filtered["employer"] != "Unknown"].isin(selected_years)]
+df_employer_known = filtered[filtered["employer"] != "Unknown"].isin(selected_years)
 text = " ".join(df_employer_known["employer"])
 
 # Create word cloud
