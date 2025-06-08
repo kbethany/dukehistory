@@ -81,7 +81,7 @@ st.altair_chart(chart, use_container_width=True)
 # Section 4: Top Professions
 st.subheader("Top Professions")
 
-df_profession_known = df_known[df_known["profession"].notna()
+df_profession_known = df_known[df_known["profession"] !="Unknown"]
 profession_counts = df_profession_known["profession"].value_counts().head(10).reset_index()
 profession_counts.columns = ["profession", "count"]
 
