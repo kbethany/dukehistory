@@ -54,7 +54,7 @@ st.markdown("---")
 
 # Section 1: Total counts
 col1, col2 = st.columns(2)
-col1.metric("Total Graduates", len(df))
+col1.metric("Total Graduates, 2016 - 2023", len(df))
 col2.metric("With Known Outcomes", len(df_known))
 
 # Section 2: Graduates by year
@@ -78,7 +78,7 @@ st.altair_chart(bar + mean_rule, use_container_width=True)
 # Section 3: Top industries
 st.subheader("Top Industries")
 df_industry_known = df_known[df_known["profession" != "Unknown"]]
-filtered_df = df_industry_known[df_industry_known["gradyr"].isin(selected_years)]
+filtered_df = df[df["gradyr"].isin(selected_years)]
 industry_counts = df_industry_known["industry"].value_counts().head(10).reset_index()
 industry_counts.columns = ["industry", "count"]
 
@@ -114,8 +114,8 @@ st.plotly_chart(fig, use_container_width=True)
 st.subheader("Top Professions")
 
 df_profession_known = df_known[df_known["profession" != "Unknown"].isin(selected_years)]
-filtered_df = df_industry_known[df_industry_known["gradyr"].isin(selected_years)]
-profession_counts = df_profession_known["profession"].value_counts().head(10).reset_index()
+filtered_df = df[df["gradyr"].isin(selected_years)]
+profession_counts = filtered_df["profession"].value_counts().head(10).reset_index()
 profession_counts.columns = ["profession", "count"]
 
 chart = alt.Chart(profession_counts).mark_bar().encode(
