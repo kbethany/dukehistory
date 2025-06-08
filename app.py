@@ -168,4 +168,4 @@ st.pyplot(fig)
 
 # raw data table
 with st.expander("View raw data"):
-    st.table(df.head()  # or limit to ~50 if it's too big
+    st.table(df.head())  # or limit to ~50 if it's too big
