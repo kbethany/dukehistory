@@ -147,4 +147,48 @@ with st.expander("View raw data"):
     st.table(df_known.head(50))  # or full df if it's not too big
 
 
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+# Load data (cached for performance)
+@st.cache_data
+def load_data():
+    return pd.read_csv("data/grads.csv")
+
+df = load_data()
+
+# --- Filter: Graduation Year ---
+st.sidebar.header("Filter")
+years = sorted(df["graduation_year"].dropna().unique())
+selected_years = st.sidebar.multiselect(
+    "Select graduation year(s)",
+    options=years,
+    default=years
+)
+
+# Apply filter
+filtered_df = df[df["graduation_year"].isin(selected_years)]
+
+# --- Clean profession field ---
+filtered_df = filtered_df[filtered_df["profession"].notna()]
+filtered_df = filtered_df[filtered_df["profession"].str.lower() != "unknown"]
+
+# --- Count professions ---
+profession_counts = (
+    filtered_df["profession"]
+    .value_counts()
+    .reset_index()
+    .rename(columns={"index": "profession", "profession": "count"})
+)
+
+# --- Plot tree map ---
+fig = px.treemap(
+    profession_counts,
+    path=["profession"],
+    values="count",
+    title="Top Professions by Graduation Year Selection"
+)
+st.plotly_chart(fig, use_container_width=True)
+
 
