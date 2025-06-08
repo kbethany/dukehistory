@@ -7,26 +7,22 @@ st.set_page_config(page_title="Duke History Alumni Outcomes", layout="wide")
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv("grads.csv")
+    df = pd.read_csv("data/duke_history_grads.csv")  # adjust path if needed
 
-
-    # Rename columns
     df = df.rename(columns={
         "Completion Year (Academic)": "gradyr",
-        "Where Are They Now": "job",
-        "Role": "role",
-        "Employer": "employer",
-        "Profession": "profession",
-        "Industry": "industry"})
+        "Where Are They Now":        "job",
+        "Role":                      "role",
+        "Employer":                  "employer",
+        "Profession":                "profession",
+        "Industry":                  "industry"
+    })
 
-    # Add ID if not present
     if "id" not in df.columns:
         df["id"] = range(1, len(df) + 1)
 
-    # Add known/unknown status
     df["status_known"] = df["role"].notna()
 
-    # Clean up blanks
     for col in ["industry", "profession", "employer"]:
         df[col] = df[col].fillna("Unknown")
 
@@ -35,6 +31,17 @@ def load_data():
 df = load_data()
 df_known = df[df["status_known"]]
 
+# Build sidebar
+st.sidebar.header("Filter Graduates")
+years = sorted(df["gradyr"].dropna().unique())
+selected_years = st.sidebar.multiselect(
+    "Select graduation year(s)",
+    options=years,
+    default=years
+)
+
+# Apply  filter
+filtered = df[df["gradyr"].isin(selected_years)]
 
 # Title and context
 st.title("Where Do Our History Graduates Go?")
@@ -145,49 +152,3 @@ st.plotly_chart(fig, use_container_width=True)
 # Optional: raw data table
 with st.expander("View raw data"):
     st.table(df_known.head(50))  # or full df if it's not too big
-
-
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-
-# Load data (cached for performance)
-@st.cache_data
-def load_data():
-    return pd.read_csv("grads.csv")
-
-df = load_data()
-
-# --- Filter: Graduation Year ---
-st.sidebar.header("Filter")
-years = sorted(df["gradyr"].dropna().unique())
-selected_years = st.sidebar.multiselect(
-    "Select graduation year(s)",
-    options=years,
-    default=years
-)
-
-# Apply filter
-filtered_df = df[df["gradyr"].isin(selected_years)]
-
-# --- Clean profession field ---
-filtered_df = filtered_df[filtered_df["profession"].notna()]
-filtered_df = filtered_df[filtered_df["profession"].str.lower() != "unknown"]
-
-# --- Count professions ---
-profession_counts = (
-    filtered_df["profession"]
-    .value_counts()
-    .reset_index()
-)
-
-# --- Plot tree map ---
-fig = px.treemap(
-    profession_counts,
-    path=["profession"],
-    values="count",
-    title="Top Professions by Graduation Year Selection"
-)
-st.plotly_chart(fig, use_container_width=True)
-
-
