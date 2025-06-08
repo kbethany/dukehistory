@@ -160,7 +160,7 @@ df = load_data()
 
 # --- Filter: Graduation Year ---
 st.sidebar.header("Filter")
-years = sorted(df["graduation_year"].dropna().unique())
+years = sorted(df["gradyr"].dropna().unique())
 selected_years = st.sidebar.multiselect(
     "Select graduation year(s)",
     options=years,
@@ -168,7 +168,7 @@ selected_years = st.sidebar.multiselect(
 )
 
 # Apply filter
-filtered_df = df[df["graduation_year"].isin(selected_years)]
+filtered_df = df[df["gradyr"].isin(selected_years)]
 
 # --- Clean profession field ---
 filtered_df = filtered_df[filtered_df["profession"].notna()]
@@ -179,7 +179,6 @@ profession_counts = (
     filtered_df["profession"]
     .value_counts()
     .reset_index()
-    .rename(columns={"index": "profession", "profession": "count"})
 )
 
 # --- Plot tree map ---
