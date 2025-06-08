@@ -107,9 +107,9 @@ chart = alt.Chart(employer_counts).mark_bar().encode(
 st.altair_chart(chart, use_container_width=True)
 
 industry_facet = alt.Chart(df_known).mark_bar().encode(
-    x=alt.X("grad_year:O", title="Graduation Year"),
+    x=alt.X("gradyr:O", title="Graduation Year"),
     y=alt.Y("count():Q", title="Number of Graduates"),
-    tooltip=["grad_year:O", "count():Q"]
+    tooltip=["gradyr:O", "count():Q"]
 ).facet(
     column=alt.Column("profession:N", title=None, header=alt.Header(labelAngle=-45))
 ).properties(
@@ -124,10 +124,10 @@ import altair as alt
 df_filtered = df[df["profession"] != "Unknown"]
 
 industry_by_year = alt.Chart(df_known).mark_bar().encode(
-    x=alt.X("grad_year:O", title="Graduation Year", sort=alt.EncodingSortField(field="grad_year", order="ascending")),
+    x=alt.X("gradyr:O", title="Graduation Year", sort=alt.EncodingSortField(field="grad_year", order="ascending")),
     y=alt.Y("count():Q", title="Number of Graduates"),
     color=alt.Color("profession:N", title="Industry"),
-    tooltip=["grad_year:O", "profession:N", "count():Q"]
+    tooltip=["gradyr:O", "profession:N", "count():Q"]
 ).properties(
     title="Industry Breakdown by Graduation Year",
 )
