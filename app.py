@@ -130,7 +130,6 @@ profession_counts = (
     filtered_df["profession"]
     .value_counts()
     .reset_index()
-    .rename(columns={"index": "profession", "profession": "count"})
 )
 import plotly.express as px
 
