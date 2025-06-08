@@ -146,28 +146,23 @@ fig = px.treemap(
 st.plotly_chart(fig, use_container_width=True)
 
 
-"""
+
 # Generate text from known employers
-df_employer_known = df_known[df_known["employer"] != "Unknown"].isin(selected_years)]
-text = " ".join(df_employer_known["employer"])
+#df_employer_known = df_known[df_known["employer"] != "Unknown"].isin(selected_years)]
+#text = " ".join(df_employer_known["employer"])
 
 # Create word cloud
-wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
+#wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
 
-# Display in Streamlit
-st.subheader("Top Employers")
-fig, ax = plt.subplots(figsize=(10, 5))
-ax.imshow(wordcloud, interpolation="bilinear")
-ax.axis("off")
-st.pyplot(fig)
+# Display 
+#st.subheader("Top Employers")
+#fig, ax = plt.subplots(figsize=(10, 5))
+#ax.imshow(wordcloud, interpolation="bilinear")
+#ax.axis("off")
+#st.pyplot(fig)
 
 
-# Optional: raw data table
-with st.expander("View raw data"):
-    st.table(df_known.head(50))  # or full df if it's not too big
-"""
-st.subheader("List of Employers")
-st.dataframe(df_known[["employer"]].drop_duplicates().sort_values(by="employer").reset_index(drop=True))
+st.subheader("Where History graduates work today")
 
 employer_counts = (
     df_known["employer"]
@@ -176,3 +171,8 @@ employer_counts = (
     .rename(columns={"index": "Employer", "employer": "Count"})
 )
 st.dataframe(employer_counts)
+
+
+# Optional: raw data table
+with st.expander("View raw data"):
+    st.table(df_known.head(50))  # or full df if it's not too big
