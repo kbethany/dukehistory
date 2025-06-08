@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import plotly.express as px
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Duke History Alumni Outcomes", layout="wide")
 
@@ -93,7 +96,7 @@ profession_counts = (
     .value_counts()
     .reset_index()
 )
-import plotly.express as px
+
 
 fig = px.treemap(
     profession_counts,
@@ -140,8 +143,7 @@ fig = px.treemap(
 )
 st.plotly_chart(fig, use_container_width=True)
 
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
+
 
 # Generate text from known employers
 text = " ".join(df_known["employer"])
