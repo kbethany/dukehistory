@@ -81,7 +81,7 @@ st.altair_chart(chart, use_container_width=True)
 # Section 4: Top Professions
 st.subheader("Top Professions")
 
-df_profession_known = df_known[df_known["profession"]].notna()
+df_profession_known = df_known[df_known["profession"] != "Unknown"]
 profession_counts = df_profession_known["profession"].value_counts().head(10).reset_index()
 profession_counts.columns = ["profession", "count"]
 
@@ -95,7 +95,7 @@ st.altair_chart(chart, use_container_width=True)
 # Section 5: Top Employers
 st.subheader("Top Employers")
 
-df_employer_known = df_known[df_known["employer"]].notna()
+df_employer_known = df_known[df_known["employer"] != "Unknown"]
 employer_counts = df_employer_known["employer"].value_counts().head(10).reset_index()
 employer_counts.columns = ["employer", "count"]
 
