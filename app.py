@@ -59,7 +59,7 @@ col2.metric("With Known Outcomes", len(df_known))
 
 # Section 2: Graduates by year
 st.subheader("Graduates by Year")
-df_filtered = df_known[df_known["profession" != "Unknown"]]
+df_filtered = df_known[df_known["profession"] != "Unknown"]
 grads_per_year = df_known.groupby("gradyr").size().reset_index(name="count")
 mean_val = grads_per_year["count"].mean()
 
@@ -77,7 +77,7 @@ st.altair_chart(bar + mean_rule, use_container_width=True)
 
 # Section 3: Top industries
 st.subheader("Top Industries")
-df_industry_known = df_known[df_known["profession" != "Unknown"]]
+df_industry_known = df_known[df_known["profession"] != "Unknown"]
 filtered_df = df[df["gradyr"].isin(selected_years)]
 industry_counts = df_industry_known["industry"].value_counts().head(10).reset_index()
 industry_counts.columns = ["industry", "count"]
