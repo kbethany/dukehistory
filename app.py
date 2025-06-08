@@ -106,6 +106,39 @@ chart = alt.Chart(employer_counts).mark_bar().encode(
 )
 st.altair_chart(chart, use_container_width=True)
 
+industry_facet = alt.Chart(df_filtered).mark_bar().encode(
+    x=alt.X("grad_year:O", title="Graduation Year"),
+    y=alt.Y("count():Q", title="Number of Graduates"),
+    tooltip=["grad_year:O", "count():Q"]
+).facet(
+    column=alt.Column("profession:N", title=None, header=alt.Header(labelAngle=-45))
+).properties(
+    title="Graduation Trends by Industry",
+    width=100,
+    height=200
+)
+
+st.altair_chart(industry_facet, use_container_width=True)
+
+
+import altair as alt
+
+df_filtered = df[df["profession"] != "Unknown"]
+
+industry_by_year = alt.Chart(df_filtered).mark_bar().encode(
+    x=alt.X("grad_year:O", title="Graduation Year", sort=alt.EncodingSortField(field="grad_year", order="ascending")),
+    y=alt.Y("count():Q", title="Number of Graduates"),
+    color=alt.Color("profession:N", title="Industry"),
+    tooltip=["grad_year:O", "profession:N", "count():Q"]
+).properties(
+    title="Industry Breakdown by Graduation Year",
+    width=600,
+    height=400
+)
+
+st.altair_chart(industry_by_year, use_container_width=True)
+
+
 # Optional: raw data table
 with st.expander("View raw data"):
     st.table(df_known.head(50))  # or full df if it's not too big
