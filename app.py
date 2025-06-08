@@ -113,7 +113,7 @@ st.plotly_chart(fig, use_container_width=True)
 # Section 4: Top Professions
 st.subheader("Top Professions")
 
-df_profession_known = df_known[df_known["profession" != "Unknown"].isin(selected_years)]
+df_profession_known = df_known[df_known["profession"] != "Unknown"]
 filtered_df = df[df["gradyr"].isin(selected_years)]
 profession_counts = filtered_df["profession"].value_counts().head(10).reset_index()
 profession_counts.columns = ["profession", "count"]
