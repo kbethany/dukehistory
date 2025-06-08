@@ -60,7 +60,7 @@ col2.metric("With Known Outcomes", len(df_known))
 # Section 2: Graduates by year
 st.subheader("Graduates by Year")
 grads_per_year = filtered = df[df["gradyr"].isin(selected_years)]
-.groupby("gradyr").size().reset_index(name="count")
+grads_per_year = filtered.groupby("gradyr").size().reset_index(name="count")
 mean_val = grads_per_year["count"].mean()
 
 bar = alt.Chart(grads_per_year).mark_bar().encode(
