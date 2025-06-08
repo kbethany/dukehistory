@@ -146,7 +146,8 @@ st.plotly_chart(fig, use_container_width=True)
 
 
 # Generate text from known employers
-text = " ".join(df_known["employer"])
+df_employer_known = df_known[df_known["employer"] != "Unknown"]
+text = " ".join(df_employer_known["employer"])
 
 # Create word cloud
 wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
