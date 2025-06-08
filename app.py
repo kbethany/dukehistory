@@ -154,7 +154,7 @@ import plotly.express as px
 # Load data (cached for performance)
 @st.cache_data
 def load_data():
-    return pd.read_csv("data/grads.csv")
+    return pd.read_csv("grads.csv")
 
 df = load_data()
 
