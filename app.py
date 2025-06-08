@@ -7,7 +7,7 @@ st.set_page_config(page_title="Duke History Alumni Outcomes", layout="wide")
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/duke_history_grads.csv")  # adjust path if needed
+    df = pd.read_csv("grads.csv")  # adjust path if needed
 
     df = df.rename(columns={
         "Completion Year (Academic)": "gradyr",
@@ -32,7 +32,7 @@ df = load_data()
 df_known = df[df["status_known"]]
 
 # Build sidebar
-st.sidebar.header("Filter Graduates")
+st.sidebar.header("Filter by Graduation Year")
 years = sorted(df["gradyr"].dropna().unique())
 selected_years = st.sidebar.multiselect(
     "Select graduation year(s)",
