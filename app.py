@@ -106,18 +106,6 @@ chart = alt.Chart(employer_counts).mark_bar().encode(
 )
 st.altair_chart(chart, use_container_width=True)
 
-industry_facet = alt.Chart(df_known).mark_bar().encode(
-    x=alt.X("gradyr:O", title="Graduation Year"),
-    y=alt.Y("count():Q", title="Number of Graduates"),
-    tooltip=["gradyr:O", "count():Q"]
-).facet(
-    column=alt.Column("profession:N", title=None, header=alt.Header(labelAngle=-45))
-).properties(
-    title="Graduation Trends by Industry",
-)
-
-st.altair_chart(industry_facet, use_container_width=True)
-
 
 import altair as alt
 
@@ -133,6 +121,26 @@ industry_by_year = alt.Chart(df_known).mark_bar().encode(
 )
 
 st.altair_chart(industry_by_year, use_container_width=True)
+
+##another way to show this
+years = sorted(df["gradyr"].dropna().unique())
+selected_years = st.multiselect("Select graduation year(s)", years, default=years)
+filtered_df = df[df["graduation_year"].isin(selected_years)]
+profession_counts = (
+    filtered_df["profession"]
+    .value_counts()
+    .reset_index()
+    .rename(columns={"index": "profession", "profession": "count"})
+)
+import plotly.express as px
+
+fig = px.treemap(
+    profession_counts,
+    path=["profession"],
+    values="count",
+    title="Professions by Graduation Year",
+)
+st.plotly_chart(fig, use_container_width=True)
 
 
 # Optional: raw data table
