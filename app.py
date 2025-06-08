@@ -85,6 +85,27 @@ chart = alt.Chart(industry_counts).mark_bar().encode(
 )
 st.altair_chart(chart, use_container_width=True)
 
+## Tree Map of Industries
+years = sorted(df["gradyr"].dropna().unique())
+filtered_df = df[df["gradyr"].isin(selected_years)]
+profession_counts = (
+    filtered_df["industry"]
+    .value_counts()
+    .reset_index()
+)
+import plotly.express as px
+
+fig = px.treemap(
+    profession_counts,
+    path=["industry"],
+    values="count",
+    title="Industry by Graduation Year",
+    height=700  # 👈 Increase height here (e.g., 700 or more)
+)
+st.plotly_chart(fig, use_container_width=True)
+
+
+
 # Section 4: Top Professions
 st.subheader("Top Professions")
 
@@ -98,21 +119,6 @@ chart = alt.Chart(profession_counts).mark_bar().encode(
     tooltip=["profession", "count"]
 )
 st.altair_chart(chart, use_container_width=True)
-
-# Section 5: Top Employers
-st.subheader("Top Employers")
-
-df_employer_known = df_known[df_known["employer"] != "Unknown"]
-employer_counts = df_employer_known["employer"].value_counts().head(10).reset_index()
-employer_counts.columns = ["employer", "count"]
-
-chart = alt.Chart(employer_counts).mark_bar().encode(
-    x=alt.X("count:Q", title="Number of Graduates"),
-    y=alt.Y("employer:N", sort="-x", title="Employer"),
-    tooltip=["employer", "count"]
-)
-st.altair_chart(chart, use_container_width=True)
-
 
 import altair as alt
 
@@ -129,7 +135,7 @@ industry_by_year = alt.Chart(df_known).mark_bar().encode(
 
 st.altair_chart(industry_by_year, use_container_width=True)
 
-##another way to show this
+## Tree Map of Professions
 years = sorted(df["gradyr"].dropna().unique())
 filtered_df = df[df["gradyr"].isin(selected_years)]
 profession_counts = (
@@ -144,8 +150,25 @@ fig = px.treemap(
     path=["profession"],
     values="count",
     title="Professions by Graduation Year",
+    height=700  # 👈 Increase height here (e.g., 700 or more)
 )
 st.plotly_chart(fig, use_container_width=True)
+
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+# Generate text from known employers
+text = " ".join(df_known["employer"])
+
+# Create word cloud
+wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
+
+# Display in Streamlit
+st.subheader("Top Employers")
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.imshow(wordcloud, interpolation="bilinear")
+ax.axis("off")
+st.pyplot(fig)
 
 
 # Optional: raw data table
