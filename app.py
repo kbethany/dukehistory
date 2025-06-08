@@ -114,8 +114,6 @@ industry_facet = alt.Chart(df_known).mark_bar().encode(
     column=alt.Column("profession:N", title=None, header=alt.Header(labelAngle=-45))
 ).properties(
     title="Graduation Trends by Industry",
-    width=100,
-    height=200
 )
 
 st.altair_chart(industry_facet, use_container_width=True)
@@ -132,8 +130,6 @@ industry_by_year = alt.Chart(df_known).mark_bar().encode(
     tooltip=["grad_year:O", "profession:N", "count():Q"]
 ).properties(
     title="Industry Breakdown by Graduation Year",
-    width=600,
-    height=400
 )
 
 st.altair_chart(industry_by_year, use_container_width=True)
