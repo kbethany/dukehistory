@@ -125,7 +125,7 @@ st.altair_chart(industry_by_year, use_container_width=True)
 ##another way to show this
 years = sorted(df["gradyr"].dropna().unique())
 selected_years = st.multiselect("Select graduation year(s)", years, default=years)
-filtered_df = df[df["graduation_year"].isin(selected_years)]
+filtered_df = df[df["gradyr"].isin(selected_years)]
 profession_counts = (
     filtered_df["profession"]
     .value_counts()
