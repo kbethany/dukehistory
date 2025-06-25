@@ -165,7 +165,3 @@ fig, ax = plt.subplots(figsize=(10, 5))
 ax.imshow(wordcloud, interpolation="bilinear")
 ax.axis("off")
 st.pyplot(fig)
-
-# raw data table
-with st.expander("View raw data"):
-    st.table(df.head())  # or limit to ~50 if it's too big
